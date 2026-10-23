@@ -4,11 +4,11 @@ on:
   push:
     branches: [main, feature/jpeg-json-bridge]
     paths:
-      - "tools/jpeg-json-bridge/**"
+      - "index.html"
       - ".github/workflows/jpeg-json-bridge.yml"
   pull_request:
     paths:
-      - "tools/jpeg-json-bridge/**"
+      - "index.html"
       - ".github/workflows/jpeg-json-bridge.yml"
   workflow_dispatch:
 
@@ -32,7 +32,7 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          p = Path("tools/jpeg-json-bridge/index.html")
+          p = Path("index.html")
           html = p.read_text(encoding="utf-8")
           required = [
               'id="jpegInput"', 'id="jsonInput"', 'crypto.subtle.digest',
@@ -52,7 +52,7 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           import re
-          html = Path("tools/jpeg-json-bridge/index.html").read_text(encoding="utf-8")
+          html = Path("index.html").read_text(encoding="utf-8")
           scripts = re.findall(r"<script>(.*?)</script>", html, flags=re.S)
           if len(scripts) != 1:
               raise SystemExit(f"Expected one inline script, found {len(scripts)}")
