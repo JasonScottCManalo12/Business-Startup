@@ -1,7 +1,18 @@
-name: JPEG to ASCII interpreter test
+name: Image-to-vision bridge
 
 on:
   workflow_dispatch:
+    inputs:
+      image_url:
+        description: "Public HTTPS URL of the image to inspect"
+        required: true
+        type: string
+        default: "https://raw.githubusercontent.com/JasonScottCManalo12/Business-Startup/main/random-image-1080x8000.jpg"
+      preview_width:
+        description: "Preview width in pixels (32–1024)"
+        required: true
+        type: string
+        default: "324"
   push:
     paths:
       - "tools/image_to_ascii.py"
@@ -11,9 +22,12 @@ permissions:
   contents: read
 
 jobs:
-  image-to-ascii:
+  image-bridge:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    env:
+      IMAGE_URL: ${{ inputs.image_url || 'https://raw.githubusercontent.com/JasonScottCManalo12/Business-Startup/main/random-image-1080x8000.jpg' }}
+      PREVIEW_WIDTH: ${{ inputs.preview_width || '324' }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -23,12 +37,13 @@ jobs:
           python-version: "3.12"
       - name: Install Pillow
         run: python -m pip install --disable-pip-version-check Pillow
-      - name: Download, decode, and render preview
+      - name: Download image and create preview
         run: python tools/image_to_ascii.py
-      - name: Upload image previews
+      - name: Upload bridge output
         uses: actions/upload-artifact@v4
         with:
-          name: image-bridge-previews
+          name: image-bridge-output
           path: |
-            image-ascii.txt
             image-preview.png
+            image-ascii.txt
+            image-metadata.json
