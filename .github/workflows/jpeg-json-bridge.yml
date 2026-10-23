@@ -2,13 +2,15 @@ name: JPEG JSON Bridge CI
 
 on:
   push:
-    branches: [main, feature/jpeg-json-bridge]
+    branches: [main, feature/jpeg-json-bridge, feature/random-image-generator]
     paths:
-      - "tools/jpeg-json-bridge/**"
+      - "index.html"
+      - "tools/jpeg-json-bridge/index.html"
       - ".github/workflows/jpeg-json-bridge.yml"
   pull_request:
     paths:
-      - "tools/jpeg-json-bridge/**"
+      - "index.html"
+      - "tools/jpeg-json-bridge/index.html"
       - ".github/workflows/jpeg-json-bridge.yml"
   workflow_dispatch:
 
@@ -17,7 +19,7 @@ permissions:
 
 jobs:
   validate:
-    name: Validate browser-only app
+    name: Validate JPEG–JSON Bridge
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -28,7 +30,7 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Check required app features
+      - name: Check required bridge features
         run: |
           python3 - <<'PY'
           from pathlib import Path
@@ -36,18 +38,18 @@ jobs:
           html = p.read_text(encoding="utf-8")
           required = [
               'id="jpegInput"', 'id="jsonInput"', 'crypto.subtle.digest',
-              'format:\'jpeg-json-bridge\'', 'application/json',
+              "format:'jpeg-json-bridge'", 'application/json',
               'Reconstruct and verify', 'Convert to JSON'
           ]
           missing = [item for item in required if item not in html]
           if missing:
-              raise SystemExit("Missing expected app features: " + ", ".join(missing))
+              raise SystemExit("Missing expected bridge features: " + ", ".join(missing))
           if "<script>" not in html or "</script>" not in html:
               raise SystemExit("Inline JavaScript block not found.")
-          print("Required app features found.")
+          print("Required bridge features found.")
           PY
 
-      - name: Check JavaScript syntax
+      - name: Check bridge JavaScript syntax
         run: |
           python3 - <<'PY'
           from pathlib import Path
