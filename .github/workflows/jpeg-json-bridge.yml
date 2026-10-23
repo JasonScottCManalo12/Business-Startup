@@ -1,0 +1,61 @@
+name: JPEG JSON Bridge CI
+
+on:
+  push:
+    branches: [main, feature/jpeg-json-bridge]
+    paths:
+      - "tools/jpeg-json-bridge/**"
+      - ".github/workflows/jpeg-json-bridge.yml"
+  pull_request:
+    paths:
+      - "tools/jpeg-json-bridge/**"
+      - ".github/workflows/jpeg-json-bridge.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate browser-only app
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check required app features
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("tools/jpeg-json-bridge/index.html")
+          html = p.read_text(encoding="utf-8")
+          required = [
+              'id="jpegInput"', 'id="jsonInput"', 'crypto.subtle.digest',
+              'format:\'jpeg-json-bridge\'', 'application/json',
+              'Reconstruct and verify', 'Convert to JSON'
+          ]
+          missing = [item for item in required if item not in html]
+          if missing:
+              raise SystemExit("Missing expected app features: " + ", ".join(missing))
+          if "<script>" not in html or "</script>" not in html:
+              raise SystemExit("Inline JavaScript block not found.")
+          print("Required app features found.")
+          PY
+
+      - name: Check JavaScript syntax
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          html = Path("tools/jpeg-json-bridge/index.html").read_text(encoding="utf-8")
+          scripts = re.findall(r"<script>(.*?)</script>", html, flags=re.S)
+          if len(scripts) != 1:
+              raise SystemExit(f"Expected one inline script, found {len(scripts)}")
+          Path("/tmp/jpeg-json-bridge.js").write_text(scripts[0], encoding="utf-8")
+          PY
+          node --check /tmp/jpeg-json-bridge.js
