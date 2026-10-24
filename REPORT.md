@@ -3,7 +3,7 @@
 **Repository:** [Business-Startup](https://github.com/JasonScottCManalo12/Business-Startup)  
 **Status:** Experimental / Proof of Concept  
 **Report date:** October 24, 2026  
-**Latest experiment note:** October 24, 2026, 10:03 PHT (UTC+08:00)
+**Latest experiment note:** October 24, 2026, 11:42 PHT (UTC+08:00)
 
 ## 1. Purpose
 
@@ -61,6 +61,14 @@ The user reported that a temporary ChatGPT chat successfully described the webpa
 **What this supports:** the access or retrieval experience can differ between conversations or attempts. The failure in the original conversation is not, by itself, evidence that the public page or JPEG is defective.
 
 **What this does not establish:** we do not have a tool-call trace from the successful temporary/new chats. We therefore cannot conclude whether those chats used browser rendering, direct image retrieval, a different fetch path, cache, another tool, or a retry. The suggestion that the successful chat avoided `fetch` remains a hypothesis, not a verified finding.
+
+### 4.2 Follow-up live-page retrieval attempt
+
+**Recorded:** October 24, 2026, 11:42 PHT (UTC+08:00).
+
+A follow-up attempt to open the published GitHub Pages URL (`https://jasonscottcmanalo12.github.io/Business-Startup/`) again returned `Cache miss` in the current conversation's web-retrieval path. Opening the GitHub repository URL through that same path also returned `Cache miss`. This means the live rendered page could not be visually verified in this attempt. Separately, the connected GitHub file tool successfully retrieved `main/index.html` and confirmed the source markup still points the “GitHub Photo” image and source link to `Screenshot_2026-10-23-15-50-12-32.jpg`; this is source verification, not proof of the currently rendered live page.
+
+**Interpretation:** this repeat failure reinforces that this conversation's retrieval path cannot currently verify the live page. It does not establish that GitHub Pages is down, that the photo is broken, or that other chats/tools will fail. The visible rendering and image-load status remain unverified here.
 
 ## 5. What the evidence supports
 
