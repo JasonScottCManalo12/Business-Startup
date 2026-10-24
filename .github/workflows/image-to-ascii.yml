@@ -7,7 +7,7 @@ on:
         description: "Public HTTPS URL of the image to inspect"
         required: true
         type: string
-        default: "https://raw.githubusercontent.com/JasonScottCManalo12/Business-Startup/main/random-image-1080x8000.jpg"
+        default: "https://raw.githubusercontent.com/JasonScottCManalo12/Business-Startup/main/Screenshot_2026-10-23-15-50-12-32.jpg"
       preview_width:
         description: "Preview width in pixels (32–1024)"
         required: true
@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     env:
-      IMAGE_URL: ${{ inputs.image_url || 'https://raw.githubusercontent.com/JasonScottCManalo12/Business-Startup/main/random-image-1080x8000.jpg' }}
+      IMAGE_URL: ${{ inputs.image_url || 'https://raw.githubusercontent.com/JasonScottCManalo12/Business-Startup/main/Screenshot_2026-10-23-15-50-12-32.jpg' }}
       PREVIEW_WIDTH: ${{ inputs.preview_width || '324' }}
     steps:
       - name: Check out repository
